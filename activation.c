@@ -12,6 +12,10 @@
 
 double logistic_fn(double);
 double logistic_derivative(double);
+double tanh_fn(double);
+double tanh_derivative(double);
+double ReLU_fn(double);
+double ReLU_derivative(double);
 
 /**
  * init_activation
@@ -43,29 +47,31 @@ Activation *init_activation(ActivationType type) {
 			}
 			strncpy(activation->name, "LOGISTIC", 8);
 			break;
+		case TANH: 
+			activation->fn = &tanh_fn;
+			activation->derivative = &tanh_derivative;
+			activation->name = (char *) calloc(5, sizeof(char));
+			if (activation->name == NULL) {
+				fprintf(stderr, "Could not allocate activation name.\n");
+				exit(1);
+			}
+			strncpy(activation->name, "TANH", 4);
+			break;
+		case RELU:
+			activation->fn = &ReLU_fn;
+			activation->derivative = &ReLU_derivative;
+			activation->name = (char *) calloc(5, sizeof(char));
+			if (activation->name == NULL) {
+				fprintf(stderr, "Could not allocate activation name.\n");
+				exit(1);
+			}
+			strncpy(activation->name, "RELU", 4);
+			break;
 		default: 
 			fprintf(stderr, "Activation type is unsupported.\n");
 			exit(1);
 	}
 	return activation;
-}
-
-/** 
- * logistic_fn
- *
- * The logistic activation function.
- */
-double logistic_fn(double input) {
-	return 1/(1 + exp(-1 * input));
-}
-
-/**
- * logistic_derivative
- *
- * The derivative of a logistic activation function.
- */
-double logistic_derivative(double input) {
-	return logistic_fn(input) * (1 - logistic_fn(input));
 }
 
 /**
@@ -77,3 +83,35 @@ void cleanup_activation(Activation *activation) {
 	free(activation->name);
 	free(activation);
 }
+
+/** 
+ * Various activation functions and their derivatives
+ */
+double logistic_fn(double input) {
+	return 1/(1 + exp(-1 * input));
+}
+double logistic_derivative(double input) {
+	return logistic_fn(input) * (1 - logistic_fn(input));
+}
+double tanh_fn(double input) {
+	return (exp(input) - exp(-1 * input))/(exp(input) + exp(-1 * input));
+}
+double tanh_derivative(double input) {
+	return 1 - pow(tanh_fn(input), 2);
+}
+double ReLU_fn(double input) {
+	if (input < 0) {
+		return 0;
+	}
+	return input;
+}
+double ReLU_derivative(double input) {
+	if (input <= 0) {
+		return 0;
+	}
+	return 1;
+}
+
+
+
+

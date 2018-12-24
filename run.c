@@ -14,7 +14,7 @@
 int main() {
 	double inputs[5] = {1,2,3,4,5};
 	Layer *layer1 = init_input_layer(5, inputs);
-	Layer *layer2 = init_layer(LOGISTIC, 1, 10, layer1->num_neurons);
+	Layer *layer2 = init_layer(RELU, 1, 10, layer1->num_neurons);
 
 	compute_layer_outputs(layer2, layer1);
 	

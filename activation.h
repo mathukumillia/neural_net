@@ -14,7 +14,9 @@ typedef struct activation {
 
 typedef enum {
 	INPUT = 0,
-	LOGISTIC = 1
+	LOGISTIC = 1,
+	TANH = 2,
+	RELU = 3
 } ActivationType;
  
 Activation *init_activation(ActivationType);
