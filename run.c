@@ -6,14 +6,22 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "layer.h"
 #include "activation.h"
 #include "neuron.h"
 
 
 int main() {
-	// create a neuron and print it to the console
-	Neuron *neuron = init_neuron(&logistic_fn, &logistic_derivative, 3, 0, 0);
-	print_neuron(neuron);
-	cleanup_neuron(neuron);
+	double inputs[5] = {1,2,3,4,5};
+	Layer *layer1 = init_input_layer(5, inputs);
+	Layer *layer2 = init_layer(LOGISTIC, 1, 10, layer1->num_neurons);
+
+	compute_layer_outputs(layer2, layer1);
+	
+	print_layer(layer1);
+	print_layer(layer2);
+
+	cleanup_layer(layer1);
+	cleanup_layer(layer2);
 	return 0;
 }

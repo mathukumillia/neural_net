@@ -1,8 +1,8 @@
 CC=gcc
 CFLAGS= -Wall -Werror -g
-DEPS=neuron.h activation.h
+DEPS=neuron.h activation.h layer.h
 
-neural_net: run.o neuron.o activation.o
+neural_net: run.o activation.o layer.o neuron.o
 	$(CC) -o $@ $^ -lm
 
 %.o: %.c $(DEPS)
