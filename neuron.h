@@ -9,12 +9,12 @@
 #include "activation.h"
 
 typedef struct neuron {
-	int id;
-	Activation *activation;
-	int layer;
-	int num_weights;
-	double *weights;
-	double output;
+    int id;
+    Activation *activation;
+    int layer;
+    int num_weights;
+    double *weights;
+    double output;
 } Neuron;
 
 void init_neuron(Neuron *, ActivationType, int, int, int);

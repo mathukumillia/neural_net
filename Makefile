@@ -2,7 +2,7 @@ CC=gcc
 CFLAGS= -Wall -Werror -g
 DEPS=neuron.h activation.h layer.h
 
-neural_net: run.o activation.o layer.o neuron.o
+neural_net: run.o activation.o layer.o neuron.o data_reader.o
 	$(CC) -o $@ $^ -lm
 
 %.o: %.c $(DEPS)

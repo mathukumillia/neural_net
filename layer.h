@@ -9,10 +9,10 @@
 #include "neuron.h"
 
 typedef struct layer {
-	Neuron *neurons;
-	int num_neurons;
-	int layer_num;
-	ActivationType type;
+    Neuron *neurons;
+    int num_neurons;
+    int layer_num;
+    ActivationType type;
 } Layer;
 
 
