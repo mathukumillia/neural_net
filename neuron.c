@@ -15,13 +15,22 @@
 /**
  * init_input_neuron
  *
- * Initializes the given neuron to be an input neuron with the given input value
+ * Initializes the given neuron to be an input neuron w/ a default value of 0.
  */
-void init_input_neuron(Neuron *neuron, int id, double input) {
+void init_input_neuron(Neuron *neuron, int id) {
     neuron->activation = init_activation(INPUT);
     neuron->num_weights = 0;
     neuron->layer = 0;
     neuron->id = id;
+    neuron->output = 0;
+}
+
+/**
+ * set_output
+ *
+ * Sets the output value of an input neuron (i.e. updates an input value)
+ */
+void set_output(Neuron *neuron, double input) {
     neuron->output = input;
 }
 

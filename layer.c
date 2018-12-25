@@ -14,27 +14,39 @@
 /**
  * init_input_layer
  *
- * Initializes a layer of inputs using the given array of inputs.
+ * Initializes a layer of inputs to 0.
  */
-Layer *init_input_layer(int num_inputs, double *inputs) {
-    Layer *layer = (Layer *) calloc(1, sizeof(Layer));
-    if (layer == NULL) {
-        fprintf(stderr, "Could not allocate layer struct.\n");
-        exit(1);
-    }
-    layer->num_neurons = num_inputs;
+void init_input_layer(Layer *layer, int num_inputs) {
+    // the +1 accounts for the bias term
+    layer->num_neurons = num_inputs + 1;
     layer->layer_num = 0;
     layer->type = INPUT;
-    layer->neurons = (Neuron *) calloc(num_inputs, sizeof(Neuron));
+    layer->neurons = (Neuron *) calloc(num_inputs + 1, sizeof(Neuron));
     if (layer->neurons == NULL) {
         fprintf(stderr, "Could not allocate neurons in layer.\n");
         exit(1);
     }
+    // initialize the input neurons
     for (int i = 0; i < num_inputs; i++) {
-        init_input_neuron(layer->neurons + i, i, inputs[i]);
+        init_input_neuron(layer->neurons + i, i);
     }
-    return layer;
-}   
+    // initialize the bias neuron
+    init_input_neuron(layer->neurons + num_inputs, num_inputs);
+} 
+
+/**
+ * update_inputs 
+ *  
+ * Updates the inputs in the given layer (must be of input type).
+ */ 
+void update_inputs(Layer *layer, double *inputs) {
+    assert(layer->type == INPUT);
+    // we iterate from 0 to num_neurons - 1 to avoid updating the bias term
+    for (int i = 0; i < layer->num_neurons - 1; i++) {
+        set_output(layer->neurons + i, inputs[i]);
+    }
+}
+
 
 /**
  * init_layer
@@ -42,16 +54,11 @@ Layer *init_input_layer(int num_inputs, double *inputs) {
  * Initialize a layer with the given layer number with num_neurons of type type 
  * in it. Also takes in the number of inputs.
  */
-Layer *init_layer(ActivationType type, int layer_num, int num_neurons, 
+void init_layer(Layer *layer, ActivationType type, int layer_num, int num_neurons, 
     int num_inputs) 
 {
     // the layer num cannot be 0, as that is the input layer
     assert(layer_num != 0);
-    Layer *layer = (Layer *) calloc(1, sizeof(Layer));
-    if (layer == NULL) {
-        fprintf(stderr, "Could not allocate layer struct.\n");
-        exit(1);
-    }
     layer->num_neurons = num_neurons;
     layer->layer_num = layer_num;
     layer->type = type;
@@ -64,7 +71,6 @@ Layer *init_layer(ActivationType type, int layer_num, int num_neurons,
     for (int i = 0; i < num_neurons; i++) {
         init_neuron(layer->neurons + i, type, num_inputs, layer_num, i);
     }
-    return layer;
 }
 
 /**
@@ -99,7 +105,7 @@ void compute_layer_outputs(Layer *layer, Layer *prev_layer) {
 /**
  * cleanup_layer
  *
- * Free the memory associated with the layer.
+ * Free the memory associated with the layer. Does NOT free layer itself.
  */
 void cleanup_layer(Layer *layer) {
     // cleanup each neuron
@@ -108,8 +114,6 @@ void cleanup_layer(Layer *layer) {
     }
     // free the neurons array 
     free(layer->neurons);
-    // free the layer
-    free(layer);
 }
 
 

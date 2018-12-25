@@ -18,7 +18,8 @@ typedef struct neuron {
 } Neuron;
 
 void init_neuron(Neuron *, ActivationType, int, int, int);
-void init_input_neuron(Neuron *, int, double);
+void init_input_neuron(Neuron *, int);
 void compute_output(Neuron *, void *);
+void set_output(Neuron *, double);
 void print_neuron(Neuron *);
 void cleanup_neuron(Neuron *);

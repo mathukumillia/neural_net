@@ -7,10 +7,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "layer.h"
 #include "activation.h"
 #include "data_reader.h"
-#include "neuron.h"
+#include "neural_net.h"
 
 int main(int argc, char **argv) {
     // ensure the program has been called with a filename
@@ -21,20 +20,23 @@ int main(int argc, char **argv) {
     
     Data *data = read_data(argv[1]);
     // print_data(data);
-    Layer *layer1 = init_input_layer(5, data->xvals[0]);
-    Layer *layer2 = init_layer(RELU, 1, 10, layer1->num_neurons);
-    Layer *layer3 = init_layer(RELU, 2, 10, layer2->num_neurons);
+    NeuralNetwork *network = init_neural_net(5);
+    add_layer(network, RELU, 10);
+    add_layer(network, RELU, 10);
+    update_neural_net_input(network, data->xvals[0]);
+    compute_neural_net_output(network);
 
-    compute_layer_outputs(layer2, layer1);
-    compute_layer_outputs(layer3, layer2);
+    print_neural_net(network);
+
+    // update_inputs(layer1, data->xvals[0]);
+    // compute_layer_outputs(layer2, layer1);
+    // compute_layer_outputs(layer3, layer2);
     
     // print_layer(layer1);
     // print_layer(layer2);
     // print_layer(layer3);
 
-    cleanup_layer(layer1);
-    cleanup_layer(layer2);
-    cleanup_layer(layer3);
+    cleanup_neural_net(network);
     cleanup_data(data);
     return 0;
 }

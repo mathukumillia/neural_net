@@ -16,8 +16,9 @@ typedef struct layer {
 } Layer;
 
 
-Layer *init_layer(ActivationType, int, int, int);
-Layer *init_input_layer(int, double *);
+void init_layer(Layer *, ActivationType, int, int, int);
+void init_input_layer(Layer *, int);
+void update_inputs(Layer *, double *);
 void compute_layer_outputs(Layer *, Layer *);
 void print_layer(Layer *);
 void cleanup_layer(Layer *);
