@@ -23,18 +23,10 @@ int main(int argc, char **argv) {
     NeuralNetwork *network = init_neural_net(5);
     add_layer(network, RELU, 10);
     add_layer(network, RELU, 10);
-    update_neural_net_input(network, data->xvals[0]);
-    compute_neural_net_output(network);
+    add_layer(network, RELU, 2);
 
     print_neural_net(network);
-
-    // update_inputs(layer1, data->xvals[0]);
-    // compute_layer_outputs(layer2, layer1);
-    // compute_layer_outputs(layer3, layer2);
-    
-    // print_layer(layer1);
-    // print_layer(layer2);
-    // print_layer(layer3);
+    train_neural_net(network, data);
 
     cleanup_neural_net(network);
     cleanup_data(data);

@@ -5,11 +5,14 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
+#include <math.h>
 #include "layer.h"
 #include "activation.h"
 #include "neural_net.h"
 
 void expand_capacity(NeuralNetwork *);
+double compute_error(NeuralNetwork *, double *, int);
 
 /**
  * init_neural_net
@@ -73,10 +76,35 @@ void compute_neural_net_output(NeuralNetwork *network) {
 /** 
  * train_neural_net
  *
- * Trains the neural net given data.
+ * Trains the neural net given data using stochastic gradient descent.
  */
 void train_neural_net(NeuralNetwork *network, Data *data) {
-    
+    double error = 0;
+    for (int i = 0; i < data->num_pts; i++) {
+        update_neural_net_input(network, data->xvals[i]);
+        print_neural_net(network);
+        compute_neural_net_output(network);
+        error = compute_error(network, data->yvals[i], data->ydim);
+        printf("Error: %f\n", error);
+    }
+}
+
+/**
+ * compute_error
+ *
+ * Computes the error using Euclidean distance from the given output.
+ */
+double compute_error(NeuralNetwork *network, double *output, int ydim) {
+    double error = 0;
+    Layer *output_layer = &network->layers[network->num_layers - 1];
+    int dim = output_layer->num_neurons;
+    // the dimension of the last neural network layer must match the output 
+    // dimension
+    assert(dim == ydim);
+    for (int i = 0; i < dim; i++) {
+        error += pow(output_layer->neurons[i].output - output[i], 2);
+    }
+    return error;
 }
 
 /**
